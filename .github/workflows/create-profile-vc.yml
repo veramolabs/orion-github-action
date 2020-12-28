@@ -23,8 +23,7 @@ jobs:
       
       - run: echo ${{ fromJSON(steps.actor.outputs.result).did }}
 
-
-       - uses: octokit/graphql-action@v2.x
+      - uses: octokit/graphql-action@v2.x
         id: viewer
         with:
           query: |
