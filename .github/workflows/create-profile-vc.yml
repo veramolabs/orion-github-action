@@ -13,7 +13,11 @@ jobs:
           url: ${{secrets.AGENT_URL}}
           token: ${{secrets.AGENT_TOKEN}}
           method: didManagerGetOrCreate
-          args: '{ "provider": "did:web", "alias": "bob-did.eu.ngrok.io:${{github.actor}}" }'
+          args: |
+            { 
+              "provider": "did:web",
+              "alias": "bob-did.eu.ngrok.io:${{github.actor}}" 
+            }
       
       - run: echo ${{ fromJSON(steps.actor.outputs.result).did }}
 
