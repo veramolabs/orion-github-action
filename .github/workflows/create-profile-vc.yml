@@ -30,12 +30,15 @@ jobs:
           args: |
             {
               "save": true,
-              "proofFormat": 'jwt',
+              "proofFormat": "jwt",
               "credential": {
-                "@context": ["https://www.w3.org/2018/credentials/v1"],
-                "type": ["VerifiableCredential", "Profile"],
-                "issuer": { "id": "${{ fromJSON(steps.actor.outputs.result).did }}" },
-                "issuanceDate": new Date().toISOString(),
+                "type": [
+                  "VerifiableCredential",
+                  "Profile"
+                ],
+                "issuer": { 
+                  "id": "${{ fromJSON(steps.actor.outputs.result).did }}" 
+                },
                 "credentialSubject": {
                   "id": "${{ fromJSON(steps.actor.outputs.result).did }}",
                   "nickname": "${{github.actor}}"
