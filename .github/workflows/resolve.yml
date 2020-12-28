@@ -8,8 +8,10 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: ./
+        id: resolveDid
         with:
           url: ${{secrets.AGENT_URL}}
           token: ${{secrets.AGENT_TOKEN}}
           method: ${{ 'resolveDid' }}
           args: '{ "didUrl": "did:web:sun.veramo.io" }'
+      - run: echo ${{ steps.resolveDid.outputs.result}}
