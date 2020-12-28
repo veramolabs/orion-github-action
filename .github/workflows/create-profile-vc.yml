@@ -23,6 +23,7 @@ jobs:
       
       - run: echo ${{ fromJSON(steps.actor.outputs.result).did }}
 
+      # Querying for profile information
       - uses: octokit/graphql-action@v2.x
         id: user
         with:
