@@ -1,11 +1,22 @@
-name: 'Your name here'
-description: 'Provide a description here'
-author: 'Your name or organization here'
+name: 'Veramo execute'
+description: 'Executes method on veramo service endpoint'
+author: 'Simonas Karuzas'
 inputs:
-  milliseconds: # change this
+  url:
+    description: 'veramo service endpoint'
     required: true
-    description: 'input description here'
-    default: 'default value if applicable'
+  token:
+    description: 'veramo service token'
+    required: true
+  method:
+    description: 'method name'
+    required: true
+  args:
+    description: 'method arguments'
+    required: true
+outputs:
+  result:
+    description: 'method execution result'
 runs:
   using: 'node12'
   main: 'dist/index.js'

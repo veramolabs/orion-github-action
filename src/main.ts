@@ -1,16 +1,27 @@
 import * as core from '@actions/core'
-import {wait} from './wait'
+import {Agent} from '@veramo/core'
+import {AgentRestClient} from '@veramo/remote-client'
 
 async function run(): Promise<void> {
   try {
-    const ms: string = core.getInput('milliseconds')
-    core.debug(`Waiting ${ms} milliseconds ...`) // debug is only output if you set the secret `ACTIONS_RUNNER_DEBUG` to true
+    const agent = new Agent({
+      plugins: [
+        new AgentRestClient({
+          url: core.getInput('url'),
+          enabledMethods: [core.getInput('method')],
+          headers: {
+            Authorization: `Bearer ${core.getInput('token')}`
+          }
+        })
+      ]
+    })
 
-    core.debug(new Date().toTimeString())
-    await wait(parseInt(ms, 10))
-    core.debug(new Date().toTimeString())
+    const result = await agent.execute(
+      core.getInput('method'),
+      core.getInput('args')
+    )
 
-    core.setOutput('time', new Date().toTimeString())
+    core.setOutput('result', result)
   } catch (error) {
     core.setFailed(error.message)
   }
