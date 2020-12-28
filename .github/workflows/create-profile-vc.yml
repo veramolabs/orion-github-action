@@ -23,6 +23,23 @@ jobs:
       
       - run: echo ${{ fromJSON(steps.actor.outputs.result).did }}
 
+
+       - uses: octokit/graphql-action@v2.x
+        id: viewer
+        with:
+          query: |
+            query { 
+              viewer { 
+                login
+                avatarUrl
+                name
+                url
+              }
+            }
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - run: "echo 'Actor name: ${{ fromJSON(steps.viewer.outputs.data).viewer.name }}'"
+
       # Creating self signed Profile Verifiable Credential
       - id: vc
         uses: ./
@@ -44,8 +61,10 @@ jobs:
                 },
                 "credentialSubject": {
                   "id": "${{ fromJSON(steps.actor.outputs.result).did }}",
+                  "name": "${{ fromJSON(steps.viewer.outputs.data).viewer.name }}",
                   "nickname": "${{github.actor}}",
-                  "url": "https://github.com/${{github.actor}}",
+                  "picture": "${{ fromJSON(steps.viewer.outputs.data).viewer.avatarUrl }}",
+                  "url": "${{ fromJSON(steps.viewer.outputs.data).viewer.url }}"
                 }
               }
             }
