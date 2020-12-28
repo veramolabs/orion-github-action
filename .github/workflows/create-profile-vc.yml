@@ -7,6 +7,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+
+      # Creating actor DID
       - id: actor
         uses: ./
         with:
@@ -16,11 +18,12 @@ jobs:
           args: |
             { 
               "provider": "did:ethr:rinkeby",
-              "alias": "${{github.actor}}" 
+              "alias": "${{github.actor}}@github" 
             }
       
       - run: echo ${{ fromJSON(steps.actor.outputs.result).did }}
 
+      # Creating self signed Profile Verifiable Credential
       - id: vc
         uses: ./
         with:
@@ -41,7 +44,8 @@ jobs:
                 },
                 "credentialSubject": {
                   "id": "${{ fromJSON(steps.actor.outputs.result).did }}",
-                  "nickname": "${{github.actor}}"
+                  "nickname": "${{github.actor}}",
+                  "url": "https://github.com/${{github.actor}}",
                 }
               }
             }
