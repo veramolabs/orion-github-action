@@ -34,11 +34,11 @@ jobs:
               "credential": {
                 "@context": ["https://www.w3.org/2018/credentials/v1"],
                 "type": ["VerifiableCredential", "Profile"],
-                "issuer": { "id": ${{ fromJSON(steps.actor.outputs.result).did }} },
-                issuanceDate: new Date().toISOString(),
-                credentialSubject: {
-                  id: ${{ fromJSON(steps.actor.outputs.result).did }},
-                  nickname: ${{github.actor}}
+                "issuer": { "id": "${{ fromJSON(steps.actor.outputs.result).did }}" },
+                "issuanceDate": new Date().toISOString(),
+                "credentialSubject": {
+                  "id": "${{ fromJSON(steps.actor.outputs.result).did }}",
+                  "nickname": "${{github.actor}}"
                 }
               }
             }
