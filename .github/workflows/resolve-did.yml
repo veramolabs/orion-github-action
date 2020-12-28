@@ -1,0 +1,22 @@
+name: 'Resolve DID'
+
+on: workflow_dispatch
+  inputs:
+    didUrl:
+      description: 'DID url'     
+      required: true
+      default: 'did:web:sun.veramo.io'
+
+jobs:
+  resolve: 
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: ./
+        id: resolveDid
+        with:
+          url: ${{secrets.AGENT_URL}}
+          token: ${{secrets.AGENT_TOKEN}}
+          method: resolveDid
+          args: '{ "didUrl": "${{ github.event.inputs.didUrl }}" }'
+      - run: echo ${{ steps.resolveDid.outputs.result }}

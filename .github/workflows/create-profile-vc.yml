@@ -22,6 +22,7 @@ jobs:
             }
       
       - run: echo ${{ fromJSON(steps.actor.outputs.result).did }}
+      - run: echo ${{ toJSON(github.event) }}
 
       - uses: octokit/graphql-action@v2.x
         id: user
@@ -68,5 +69,3 @@ jobs:
                 }
               }
             }
-      
-      - run: echo ${{ fromJSON(steps.vc.outputs.result).proof.jwt }}
