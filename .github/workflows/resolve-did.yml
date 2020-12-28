@@ -1,11 +1,12 @@
 name: 'Resolve DID'
 
-on: workflow_dispatch
-  inputs:
-    didUrl:
-      description: 'DID url'     
-      required: true
-      default: 'did:web:sun.veramo.io'
+on: 
+  workflow_dispatch:
+    inputs:
+      didUrl:
+        description: 'DID url'     
+        required: true
+        default: 'did:web:sun.veramo.io'
 
 jobs:
   resolve: 
