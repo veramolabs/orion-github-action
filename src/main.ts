@@ -18,7 +18,7 @@ async function run(): Promise<void> {
 
     const result = await agent.execute(
       core.getInput('method'),
-      core.getInput('args')
+      JSON.parse(core.getInput('args'))
     )
 
     core.setOutput('result', result)
