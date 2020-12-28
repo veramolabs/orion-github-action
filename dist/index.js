@@ -61,7 +61,7 @@ function run() {
                     })
                 ]
             });
-            const result = yield agent.execute(core.getInput('method'), core.getInput('args'));
+            const result = yield agent.execute(core.getInput('method'), JSON.parse(core.getInput('args')));
             core.setOutput('result', result);
         }
         catch (error) {
