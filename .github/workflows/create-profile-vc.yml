@@ -15,17 +15,32 @@ jobs:
           method: didManagerGetOrCreate
           args: |
             { 
-              "provider": "did:web",
-              "alias": "bob-did.eu.ngrok.io:${{github.actor}}" 
+              "provider": "did:ethr:rinkeby",
+              "alias": "${{github.actor}}" 
             }
       
       - run: echo ${{ fromJSON(steps.actor.outputs.result).did }}
 
-      # - id: vc
-      #   uses: ./
-      #   with:
-      #     url: ${{secrets.AGENT_URL}}
-      #     token: ${{secrets.AGENT_TOKEN}}
-      #     method: didManagerGetOrCreate
-      #     args: '{ "provider": "did:web", "alias": "bob-did.eu.ngrok.io" }'
+      - id: vc
+        uses: ./
+        with:
+          url: ${{secrets.AGENT_URL}}
+          token: ${{secrets.AGENT_TOKEN}}
+          method: createVerifiableCredential
+          args: |
+            {
+              "save": true,
+              "proofFormat": 'jwt',
+              "credential": {
+                "@context": ["https://www.w3.org/2018/credentials/v1"],
+                "type": ["VerifiableCredential", "Profile"],
+                "issuer": { "id": ${{ fromJSON(steps.actor.outputs.result).did }} },
+                issuanceDate: new Date().toISOString(),
+                credentialSubject: {
+                  id: ${{ fromJSON(steps.actor.outputs.result).did }},
+                  nickname: ${{github.actor}}
+                }
+              }
+            }
       
+      - run: echo ${{ fromJSON(steps.vc.outputs.result).proof.jwt }}
