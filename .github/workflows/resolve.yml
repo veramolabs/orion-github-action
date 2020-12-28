@@ -14,4 +14,4 @@ jobs:
           token: ${{secrets.AGENT_TOKEN}}
           method: ${{ 'resolveDid' }}
           args: '{ "didUrl": "did:web:sun.veramo.io" }'
-      - run: echo ${{ fromJSON(steps.resolveDid.outputs.result) }}
+      - run: echo ${{ fromJSON(steps.resolveDid.outputs.result).id }}
