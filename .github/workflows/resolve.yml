@@ -12,4 +12,5 @@ jobs:
           url: ${{secrets.AGENT_URL}}
           token: ${{secrets.AGENT_TOKEN}}
           method: ${{ 'resolveDid' }}
-          args: ${{ '{"didUrl": "did:web:sun.veramo.io"}' }}
+          args: 
+            didUrl: 'did:web:sun.veramo.io'
