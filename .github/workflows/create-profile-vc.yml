@@ -18,7 +18,7 @@ jobs:
           args: |
             { 
               "provider": "did:ethr:rinkeby",
-              "alias": "${{github.actor}}@github" 
+              "alias": "github:${{github.actor}}" 
             }
       
       - run: echo ${{ fromJSON(steps.actor.outputs.result).did }}
