@@ -1,0 +1,61 @@
+name: 'Create Reaction VC'
+
+on: 
+  workflow_dispatch:
+    inputs:
+      subject:
+        description: 'DID or URL'     
+        required: true
+        default: 'did:web:sun.veramo.io'
+      emoji:
+        description: 'Emoji'     
+        required: true
+        default: '👍'
+
+jobs:
+  profile: 
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      # Creating actor DID
+      - id: actor
+        uses: ./
+        with:
+          url: ${{secrets.AGENT_URL}}
+          token: ${{secrets.AGENT_TOKEN}}
+          method: didManagerGetOrCreate
+          args: |
+            { 
+              "provider": "did:ethr:rinkeby",
+              "alias": "${{github.actor}}@github" 
+            }
+      
+      - run: echo ${{ fromJSON(steps.actor.outputs.result).did }}
+
+
+      # Creating self Reaction Verifiable Credential
+      - id: vc
+        uses: ./
+        with:
+          url: ${{secrets.AGENT_URL}}
+          token: ${{secrets.AGENT_TOKEN}}
+          method: createVerifiableCredential
+          args: |
+            {
+              "save": true,
+              "proofFormat": "jwt",
+              "credential": {
+                "type": [
+                  "VerifiableCredential",
+                  "Reaction"
+                ],
+                "issuer": { 
+                  "id": "${{ fromJSON(steps.actor.outputs.result).did }}" 
+                },
+                "credentialSubject": {
+                  "id": "${{ github.event.inputs.subject }}",
+                  "emoji": "${{ github.event.inputs.emoji }}",
+                }
+              }
+            }
