@@ -55,7 +55,7 @@ jobs:
                 },
                 "credentialSubject": {
                   "id": "${{ github.event.inputs.subject }}",
-                  "emoji": "${{ github.event.inputs.emoji }}",
+                  "emoji": "${{ github.event.inputs.emoji }}"
                 }
               }
             }
