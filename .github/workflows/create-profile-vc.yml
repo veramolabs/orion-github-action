@@ -69,3 +69,11 @@ jobs:
                 }
               }
             }
+
+      - run: mkdir -p ./artifacts
+      - run: echo ${{ steps.vc.outputs.result) }} > ./artifacts/credential.txt
+
+      - uses: actions/upload-artifact@v2
+        with:
+          name: profileCredential
+          path: ./artifacts/credential.txt
