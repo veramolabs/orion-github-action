@@ -41,6 +41,43 @@ jobs:
           owner: ${{github.event.repository.owner.login}}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - run: "echo 'Issue count: ${{ fromJSON(steps.issues.outputs.data).repository.issues.totalCount }}'"
 
-     
+      # Creating self signed Profile Verifiable Credential
+      - id: vc
+        if: ${{ fromJSON(steps.issues.outputs.data).repository.issues.totalCount == 1 }}
+        uses: ./
+        with:
+          url: ${{secrets.AGENT_URL}}
+          token: ${{secrets.AGENT_TOKEN}}
+          method: createVerifiableCredential
+          args: |
+            {
+              "save": true,
+              "proofFormat": "jwt",
+              "credential": {
+                "type": [
+                  "VerifiableCredential",
+                  "Member"
+                ],
+                "issuer": { 
+                  "id": "${{ secrets.ISSUER_DID }}" 
+                },
+                "credentialSubject": {
+                  "id": "${{ fromJSON(steps.actor.outputs.result).did }}",
+                  "level": "1"
+                }
+              }
+            }
+
+      - run: mkdir -p ./artifacts
+      - run: echo ${{ toJSON(steps.vc.outputs.result) }} > ./artifacts/credential.txt
+
+      - uses: actions/upload-artifact@v2
+        id: upload
+        with:
+          name: profileCredential
+          path: ./artifacts/credential.txt
+
+      - run: "echo '${{ toJSON(steps.upload.outputs) }}'"
