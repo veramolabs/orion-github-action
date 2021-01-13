@@ -31,7 +31,7 @@ jobs:
           query: |
             query issues($name: String!, $owner: String!, $login: String!) { 
               repository(name: $name, owner: $owner) {
-                issues(filterBy: {createdBy: $createdBy}) {
+                issues(filterBy: {createdBy: $login}) {
                   totalCount
                 }
               }
