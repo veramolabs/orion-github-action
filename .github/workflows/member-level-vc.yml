@@ -80,8 +80,6 @@ jobs:
           name: memberLevelCredential
           path: ./artifacts/credential.txt
 
-      - run: "echo '${{ toJSON(steps.upload.outputs) }}'"
-
       # Add comment
       - uses: octokit/graphql-action@v2.x
         id: comment
@@ -93,12 +91,7 @@ jobs:
               }
             }
           subject: ${{github.event.issue.node_id}}
-          body: |
-            \@${{github.actor}} this is your first issue. You have reached **Member level: 1**
-            <details>
-              <summary>Verifiable credential</summary>
-              <p>${{toJSON(steps.vc.outputs.result)}}</p>
-            </details>
+          body: '@${{github.actor}} this is your first issue. You have reached **Member level: 1**\n\n<details><summary>Verifiable credential</summary><p>${{toJSON(steps.vc.outputs.result)}}</p></details>'
             
 
         env:
