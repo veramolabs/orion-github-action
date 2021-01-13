@@ -1,0 +1,46 @@
+name: 'Member level'
+
+on: [issues]
+
+jobs:
+  profile: 
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      # Creating actor DID
+      - id: actor
+        uses: ./
+        with:
+          url: ${{secrets.AGENT_URL}}
+          token: ${{secrets.AGENT_TOKEN}}
+          method: didManagerGetOrCreate
+          args: |
+            { 
+              "provider": "did:ethr:rinkeby",
+              "alias": "github:${{github.actor}}" 
+            }
+      
+      - run: echo ${{ fromJSON(steps.actor.outputs.result).did }}
+
+
+      # Querying for issue count
+      - uses: octokit/graphql-action@v2.x
+        id: issues
+        with:
+          query: |
+            query issues($name: String!, $owner: String!, $createdBy: String!) { 
+              repository(name: $name, owner: $owner) {
+                issues(filterBy: {createdBy: $createdBy}) {
+                  totalCount
+                }
+              }
+            }
+          createdBy: ${{github.actor}}
+          name: ${{github.event.repository.name}}
+          owner: ${{github.event.owner.login}}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - run: "echo 'Issue count: ${{ fromJSON(steps.user.outputs.data).repository.issues.totalCount }}'"
+
+     
