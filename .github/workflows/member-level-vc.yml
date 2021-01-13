@@ -1,6 +1,9 @@
-name: 'Member level'
+name: 'Member level (new issue)'
 
-on: [issues]
+on: 
+  issues:
+    types:
+      - "opened"
 
 jobs:
   memberLevel: 
