@@ -38,7 +38,7 @@ jobs:
             }
           createdBy: ${{github.actor}}
           name: ${{github.event.repository.name}}
-          owner: ${{github.event.owner.login}}
+          owner: ${{github.event.repository.owner.login}}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - run: "echo 'Issue count: ${{ fromJSON(steps.user.outputs.data).repository.issues.totalCount }}'"
