@@ -3,7 +3,7 @@ name: 'Member level'
 on: [issues]
 
 jobs:
-  profile: 
+  memberLevel: 
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -29,14 +29,14 @@ jobs:
         id: issues
         with:
           query: |
-            query issues($name: String!, $owner: String!, $createdBy: String!) { 
+            query issues($name: String!, $owner: String!, $login: String!) { 
               repository(name: $name, owner: $owner) {
                 issues(filterBy: {createdBy: $createdBy}) {
                   totalCount
                 }
               }
             }
-          createdBy: ${{github.actor}}
+          login: ${{github.actor}}
           name: ${{github.event.repository.name}}
           owner: ${{github.event.repository.owner.login}}
         env:
