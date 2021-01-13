@@ -94,7 +94,7 @@ jobs:
             }
           subject: ${{github.event.issue.node_id}}
           body: |
-            @${{github.actor}} this is your first issue. You have reached **Member level: 1**
+            \@${{github.actor}} this is your first issue. You have reached **Member level: 1**
             <details>
               <summary>Verifiable credential</summary>
               <p>${{toJSON(steps.vc.outputs.result)}}</p>
