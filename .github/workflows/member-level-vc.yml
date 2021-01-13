@@ -84,7 +84,7 @@ jobs:
 
       # Add comment
       - uses: octokit/graphql-action@v2.x
-        id: issues
+        id: comment
         with:
           query: |
             mutation AddComment($subject: String!, $body: String!) {
