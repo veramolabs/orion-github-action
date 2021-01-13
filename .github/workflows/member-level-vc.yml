@@ -44,7 +44,7 @@ jobs:
 
       - run: "echo 'Issue count: ${{ fromJSON(steps.issues.outputs.data).repository.issues.totalCount }}'"
 
-      # Creating self signed Profile Verifiable Credential
+      # Creating Member level verifiable credential
       - id: vc
         if: ${{ fromJSON(steps.issues.outputs.data).repository.issues.totalCount == 1 }}
         uses: ./
@@ -77,7 +77,23 @@ jobs:
       - uses: actions/upload-artifact@v2
         id: upload
         with:
-          name: profileCredential
+          name: memberLevelCredential
           path: ./artifacts/credential.txt
 
       - run: "echo '${{ toJSON(steps.upload.outputs) }}'"
+
+      # Add comment
+      - uses: octokit/graphql-action@v2.x
+        id: issues
+        with:
+          query: |
+            mutation AddComment($subject: String!, $body: String!) {
+              addComment(input: {subjectId: $subject, body: $body}) {
+                clientMutationId
+              }
+            }
+          subject: ${{github.event.issue.node_id}}
+          body: ${{toJSON(steps.vc.outputs.result)}}
+
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
