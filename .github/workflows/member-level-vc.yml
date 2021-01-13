@@ -92,7 +92,7 @@ jobs:
               }
             }
           subject: ${{github.event.issue.node_id}}
-          body: ${{format('{{{0} this is your first issue. You have reached Member level 1\n\n<details><summary>Verifiable credential</summary><p>{1}</p></details>}}', github.actor, toJSON(steps.vc.outputs.result))}}
+          body: ${{toJSON(steps.vc.outputs.result)}}
             
 
         env:
