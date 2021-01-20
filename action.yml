@@ -1,5 +1,8 @@
 name: 'Veramo execute'
 description: 'Executes method on veramo service endpoint'
+branding:
+  icon: check-circle 
+  color: green
 author: 'Simonas Karuzas'
 inputs:
   url:
