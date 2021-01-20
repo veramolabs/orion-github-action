@@ -17,7 +17,7 @@ jobs:
     steps:
       # Create verifiable credential
       - id: vc
-        uses: veramolabs/orion-github-action
+        uses: veramolabs/orion-github-action@v1
         with:
           url: ${{secrets.AGENT_URL}}
           token: ${{secrets.AGENT_TOKEN}}
