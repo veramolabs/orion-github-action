@@ -1,4 +1,4 @@
-name: 'Member level (new issue)'
+name: 'First issue badge'
 
 on: 
   issues:
@@ -6,7 +6,7 @@ on:
       - "opened"
 
 jobs:
-  memberLevel: 
+  badge: 
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -62,14 +62,15 @@ jobs:
               "credential": {
                 "type": [
                   "VerifiableCredential",
-                  "Member"
+                  "Badge"
                 ],
                 "issuer": { 
                   "id": "${{ secrets.ISSUER_DID }}" 
                 },
                 "credentialSubject": {
                   "id": "${{ fromJSON(steps.actor.outputs.result).did }}",
-                  "level": "1"
+                  "emoji": "⭐️",
+                  "title": "First issue"
                 }
               }
             }
@@ -87,6 +88,8 @@ jobs:
       # Add comment
       - uses: octokit/graphql-action@v2.x
         id: comment
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           query: |
             mutation AddComment($subject: String!, $body: String!) {
@@ -95,10 +98,16 @@ jobs:
               }
             }
           subject: ${{github.event.issue.node_id}}
-          # FIXME ${{toJSON(steps.vc.outputs.result)}}
-          # body: ${{format('{{{0} this is your first issue. You have reached Member level 1\n\n<details><summary>Verifiable credential</summary><p>{1}</p></details>}}', github.actor, toJSON(steps.vc.outputs.result))}}
-          body: ${{toJSON(steps.vc.outputs.result)}}
+          body: |
+            Greetings @${{github.actor}},
             
+            You have received <details><summary>⭐️ First issue badge</summary><p>
+            
+            ```
+            
+            ${{steps.vc.outputs.result}}
+            
+            ```
+            
+            </p></details>            
 
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
